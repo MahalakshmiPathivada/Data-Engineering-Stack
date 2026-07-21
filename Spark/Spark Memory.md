@@ -187,13 +187,98 @@ spark.memory.offHeap.size=8g
 
 
 ### Difference Between cache() and persist() from Memory Perspective?
-*cache()*  (Stores only in RAM.)
-         - MEMORY_ONLY
-*persist()*  (flexible)
-         - MEMORY_ONLY
-          - MEMORY_AND_DISK
-          - DISK_ONLY
-          - OFF_HEAP
+## Cache vs Persist
+
+### `cache()`
+*(Stores data only in RAM)*
+
+- Storage Level: `MEMORY_ONLY`
+- Faster access because data is kept in memory.
+- If memory is insufficient, partitions may need to be recomputed.
+
+```python
+df.cache()
+```
+
+---
+
+### `persist()`
+*(Provides flexible storage options)*
+
+Available Storage Levels:
+
+- `MEMORY_ONLY`
+- `MEMORY_AND_DISK`
+- `DISK_ONLY`
+- `OFF_HEAP`
+
+```python
+df.persist(StorageLevel.MEMORY_AND_DISK)
+```
+
+---
+
+## Storage Levels Overview
+
+## Cache vs Persist
+
+### `cache()`
+*(Stores data only in RAM)*
+
+- Storage Level: `MEMORY_ONLY`
+- Faster access because data is kept in memory.
+- If memory is insufficient, partitions may need to be recomputed.
+
+```python
+df.cache()
+```
+
+---
+
+### `persist()`
+*(Provides flexible storage options)*
+
+Available Storage Levels:
+
+- `MEMORY_ONLY`
+- `MEMORY_AND_DISK`
+- `DISK_ONLY`
+- `OFF_HEAP`
+
+```python
+df.persist(StorageLevel.MEMORY_AND_DISK)
+```
+
+---
+
+## Storage Levels Overview
+
+```text
+Cache
+│
+└── MEMORY_ONLY
+     └── Stores data only in RAM
+
+Persist
+│
+├── MEMORY_ONLY
+│    └── Stores data only in RAM
+│
+├── MEMORY_AND_DISK
+│    └── Uses disk if memory is insufficient
+│
+├── DISK_ONLY
+│    └── Stores data only on disk
+│
+└── OFF_HEAP
+     └── Stores data outside JVM Heap
+```
+
+### Quick Summary
+
+- **cache()** = Shortcut for **persist(MEMORY_ONLY)**
+- **persist()** = Allows choosing different storage levels based on memory and performance requirements.
+
 
 ### How Does AQE Help in Memory Management?
 AQE:  Adaptive Query Execution
