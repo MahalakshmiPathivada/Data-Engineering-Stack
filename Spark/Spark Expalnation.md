@@ -24,7 +24,6 @@ Apache Spark is a distributed data processing engine that uses DAG-based executi
 
 ## Lazy Evaluation
 
-![Lazyges/lazy-evaluation.png
 
 RDD operations are categorized into:
 
@@ -39,7 +38,6 @@ RDD operations are categorized into:
 
 ### Narrow Transformations
 
-../images/narrow-transformation.png
 
 Examples:
 
@@ -49,7 +47,6 @@ Examples:
 
 ### Wide Transformations
 
-../images/wide-transformation.png
 
 Examples:
 
@@ -62,7 +59,6 @@ Examples:
 
 ## Actions
 
-![RDD Actions](../images/actions
 
 ```python
 count()
@@ -76,8 +72,6 @@ reduce()
 
 ## DAG (Directed Acyclic Graph)
 
-![DAG ges/dag.png
-
 ### Components
 
 - Directed
@@ -88,7 +82,7 @@ reduce()
 
 ## Spark Features
 
-![Spark Featuresfeatures.png
+![Spark](images/Spark_features.png)
 
 ### Features
 
@@ -115,8 +109,6 @@ Responsibilities:
 ---
 
 ## Spark Ecosystem
-
-![Spark Ecosystemcosystem.png
 
 Components:
 
@@ -165,7 +157,7 @@ User Application
 
 ## Hadoop YARN
 
-![YARN Architecture](../images/yarn-N acts as:
+![Spark](images/YARN.jpg) acts as:
 
 - Resource Manager
 - Job Scheduler
@@ -173,28 +165,6 @@ User Application
 
 ---
 
-# JVM Heap Memory
-
-![JVM Memory](../images/jvm-memory.pngHeap Memory
-│
-├── Reserved Memory
-├── User Memory
-└── Spark Memory
-    ├── Execution Memory
-    └── Storage Memory
-```
-
----
-
-# On-Heap vs Off-Heap Memory
-
-![On Heap vs Off Heap](../images/onheap-offheap.png Off-Heap |
-|----------|----------|----------|
-| Location | JVM Heap | Outside JVM Heap |
-| GC | Managed | Not Managed |
-| Performance | Higher GC | Lower GC |
-
----
 
 # Cache vs Persist
 
@@ -234,67 +204,6 @@ Supports:
 
 ---
 
-# Unity Catalog
-
-![Unityes/unity-catalog.png
-
-```text
-Metastore
-│
-└── Catalog
-    │
-    └── Schema
-        ├── Tables
-        ├── Views
-        ├── Volumes
-        └── Functions
-```
-
----
-
-# Volumes
-
-![Unity Catalog Volumes-volumes.png
-
-Used for:
-
-- CSV Files
-- JSON Files
-- PDFs
-- Images
-- ML Models
-
----
-
-# Lineage
-
-![Unity Catalog Lineage]lineage.png
-
-```text
-Source Table
-      ↓
-Silver Table
-      ↓
-Gold Table
-      ↓
-Dashboard
-```
-
----
-
-# Enterprise Unity Catalog Design
-
-![Enterprise Unity Catalog](../imagesg
-
-```text
-Metastore
-│
-├── sales_catalog
-├── finance_catalog
-└── marketing_catalog
-```
-
----
 
 # Summary
 
@@ -308,11 +217,3 @@ Apache Spark provides:
 - In-Memory Computing
 - Scalability
 - High Performance
-
-Unity Catalog provides:
-
-- Governance
-- Security
-- Lineage
-- Auditing
-- Data Sharing
