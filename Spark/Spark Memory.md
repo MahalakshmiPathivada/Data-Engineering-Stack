@@ -172,14 +172,14 @@ On-Heap Memory -- By default Spark stores data inside JVM Heap. (mainly we are u
 
 suppose -Cached data is stored inside the JVM heap. as we might have millions of java objects it will be the problem
 result 
-        Long Garbage Collection
-        Slow Jobs
-        Executor OOM
+      -  Long Garbage Collection
+       - Slow Jobs
+       - Executor OOM
 Off-Heap Memory
 Off-Heap memory is memory allocated outside JVM Heap but still used by Spark.  spark can access it directly
 Benefits:        
-        Reduced GC
-        Better memory utilization
+       - Reduced GC
+       - Better memory utilization
 
 spark.memory.offHeap.enabled=true
 spark.memory.offHeap.size=8g
@@ -187,24 +187,24 @@ spark.memory.offHeap.size=8g
 
 
 ### Difference Between cache() and persist() from Memory Perspective?
-cache()  (Stores only in RAM.)
-          MEMORY_ONLY
-persist()  (flexible)
-          MEMORY_ONLY
-          MEMORY_AND_DISK
-          DISK_ONLY
-          OFF_HEAP
+*cache()*  (Stores only in RAM.)
+         - MEMORY_ONLY
+*persist()*  (flexible)
+         - MEMORY_ONLY
+          - MEMORY_AND_DISK
+          - DISK_ONLY
+          - OFF_HEAP
 
 ### How Does AQE Help in Memory Management?
 AQE:  Adaptive Query Execution
 Benefits:
 Dynamically
-        Converts sort merge join
-        Creates broadcast joins
-        Handles skew
+       - Converts sort merge join
+        - Creates broadcast joins
+        - Handles skew
 results  
-        Reduced Shuffle
-        Reduced Memory Usage
+    -  Reduced Shuffle
+    -  Reduced Memory Usage
 
 ### Which Join Consumes Maximum Memory?
 Sort Merge Join
@@ -270,21 +270,21 @@ Answer: Active tasks cannot safely lose execution memory during computation. Cac
 
 ### What causes excessive spill despite sufficient executor memory?
 Answer:
-      Data skew
-      Large partitions
-      Poor partitioning
-      Wide transformations
-      Sort Merge Joins
-      Inefficient aggregations
+      - Data skew
+      - Large partitions
+      - Poor partitioning
+      - Wide transformations
+      - Sort Merge Joins
+      - Inefficient aggregations
 
 ### How do you reduce GC pressure?
 Answer:
-      Kryo Serialization
-      Broadcast joins
-      Reduce object creation
-      Use DataFrames instead of RDDs
-      Enable Tungsten
-      Use Off-Heap Memory
+      - Kryo Serialization
+      - Broadcast joins
+      - Reduce object creation
+      - Use DataFrames instead of RDDs
+      - Enable Tungsten
+      - Use Off-Heap Memory
 
 ### Explain a real production memory tuning exercise.
 We observed 35% execution time spent in GC and significant disk spill. Spark UI showed skewed partitions and sort-merge joins. 
@@ -312,6 +312,6 @@ Runtime reduced from 3.5 hours to 48 minutes while GC dropped below 5%."
 - Stores objects in Java object format.
 - May experience higher GC pauses when memory usage is high.
 
-* Off-Heap Memory*
+*Off-Heap Memory*
 
 - Located outside the JVM Heap.
