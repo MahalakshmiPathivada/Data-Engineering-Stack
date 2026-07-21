@@ -140,7 +140,7 @@ Eviction  (Free storage memory)
         ↓
         Cached blocks removed
 
-==> How Do You Identify Memory Issues in Spark UI?
+### How Do You Identify Memory Issues in Spark UI?
  Executors Tab  
               Storage Memory
               GC Time
@@ -155,7 +155,7 @@ Off-heap memory
 Cache-friendly computation
 Binary processing
 
-==> What is Off-Heap Memory?
+### What is Off-Heap Memory?
 Think of Spark memory in two areas:
             1. On-Heap Memory  (Inside JVM Heap)
             2. Off-Heap Memory (Outside JVM Heap)
@@ -223,46 +223,43 @@ Check Key Distribution df.groupBy("customer_id").count()
 if any on of the id have  million records other have less records then it clearly skew
 
 ### How do you handle data skew in Spark?
-Answer:
 Data skew happens when a few keys contain much more data than others, causing some partitions to process significantly more records and become bottlenecks.
 Common ways to handle skew:
 
-###### Broadcast Join
+#### Broadcast Join
       If one table is small, broadcast it.
       Avoids shuffle and reduces skew impact.
 
-Pythondf1.join(broadcast(df2), "id")Show more lines
+Pythondf1.join(broadcast(df2), "id")
 
-###### Salting  
+#### Salting  
       Add random values to skewed keys to distribute records across multiple partitions.
 
 Example:
-Plain TextA → A_1, A_2, A_3, A_4Show more lines
+Plain TextA → A_1, A_2, A_3, A_4
 
 
-###### Adaptive Query Execution (AQE) 
+#### Adaptive Query Execution (AQE) 
     Enable AQE so Spark automatically detects and splits skewed partitions.
-
 ``` Pythonspark.conf.set("spark.sql.adaptive.enabled", "true")spark.conf.set("spark.sql.adaptive.skewJoin.enabled", "true") ```
 
 
-###### Repartition Data
-        Increase partitions to distribute data more evenly.
-        
-        Pythondf.repartition(500, "customer_id")Show more lines
+#### Repartition Data
+        Increase partitions to distribute data more evenly.        
+        Pythondf.repartition(500, "customer_id")
 
 
-###### Process Skewed Keys Separately
+#### Process Skewed Keys Separately
       Filter heavily skewed keys and handle them in a separate pipeline.
 
-###### Bucketing
+#### Bucketing
         Pre-organize data by join keys to reduce shuffle during joins.
 
-## Salting Method ?
+### Salting Method ?
 The most commonly used skew-handling technique.
 Salting is a skew mitigation technique where a highly skewed key is split into multiple keys using random suffixes. The dimension side is duplicated with matching suffixes. This distributes the workload across partitions and prevents a single executor from processing all records associated with a hot key.
 
-======================================== # Advanced Architect-Level Questions===========================================
+ # Advanced Architect-Level Questions 
 
 ### Why does Storage Memory use LRU eviction?
 Answer: To remove least recently accessed blocks first, maximizing cache hit ratio while making room for new cached data.
@@ -296,7 +293,7 @@ Runtime reduced from 3.5 hours to 48 minutes while GC dropped below 5%."
 
 ### What's the difference between On-Heap and Off-Heap Memory?
 
-## On-Heap vs Off-Heap Memory
+ On-Heap vs Off-Heap Memory
 
 | Feature | On-Heap Memory | Off-Heap Memory |
 |----------|----------|----------|
@@ -306,7 +303,7 @@ Runtime reduced from 3.5 hours to 48 minutes while GC dropped below 5%."
 | **Default Usage** | Default Memory Area | Optional Configuration |
 | **Storage Type** | Stores Java Objects | Stores Binary Data |
 
-### On-Heap Memory
+*On-Heap Memory*
 
 - Located inside the JVM Heap.
 - Managed by Java Garbage Collection (GC).
@@ -314,6 +311,6 @@ Runtime reduced from 3.5 hours to 48 minutes while GC dropped below 5%."
 - Stores objects in Java object format.
 - May experience higher GC pauses when memory usage is high.
 
-### Off-Heap Memory
+* Off-Heap Memory*
 
 - Located outside the JVM Heap.
