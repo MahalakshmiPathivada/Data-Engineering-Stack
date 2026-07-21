@@ -105,10 +105,10 @@ User + Reserved Memory
 # Storage Fraction  ``` spark.memory.storageFraction=0.5 ```
 
 ## Spark Memory
-   |
+````
    |-- 50% Storage
    |-- 50% Execution
-
+````
 
 ## What Happens When Memory Becomes Full?
 *process :* 
@@ -142,12 +142,12 @@ Eviction  (Free storage memory)
 
 ### How Do You Identify Memory Issues in Spark UI?
  Executors Tab  
-              Storage Memory
-              GC Time
-              Peak Memory
+            -  Storage Memory
+            - GC Time
+            -  Peak Memory
 Tasks   
-        Memory Spill
-        Disk Spill
+       - Memory Spill
+       - Disk Spill
 
 ### Explain Tungsten Memory Management.
 Spark Tungsten introduced:   
@@ -162,12 +162,12 @@ Think of Spark memory in two areas:
 
 On-Heap Memory -- By default Spark stores data inside JVM Heap. (mainly we are using)
 
-JVM Heap
+```` JVM Heap
 |
 |-- Spark Objects
 |-- Cached Data
 |-- Shuffle Data
-|-- User Objec
+|-- User Objec ````
 
 suppose -Cached data is stored inside the JVM heap. as we might have millions of java objects it will be the problem
 result 
