@@ -162,12 +162,13 @@ Think of Spark memory in two areas:
 
 On-Heap Memory -- By default Spark stores data inside JVM Heap. (mainly we are using)
 
-```` JVM Heap
+``` JVM Heap
 |
 |-- Spark Objects
 |-- Cached Data
 |-- Shuffle Data
-|-- User Objec ````
+|-- User Objec
+ ```
 
 suppose -Cached data is stored inside the JVM heap. as we might have millions of java objects it will be the problem
 result 
