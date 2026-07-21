@@ -1,14 +1,63 @@
 # Memory architecture
+# JVM Heap Memory
+
+```text
 JVM Heap Memory
-|
-|-- Reserved Memory     -- 300MB   ( fixed for spark Engine)
-|
-|-- User Memory    -- 40% of memory (total -300MB)    for UDF’s, Metadata
-|
-|-- Spark Memory     -- 60% of Memory  (unified Memory Management)
-      |
-      |-- Execution Memory   50%      -- used for transformations (short term memory)
-      | -- Storage Memory     50%      -used for Caching ( long term Memory)
+│
+├── Reserved Memory (300 MB)
+│   └── Fixed memory reserved for the Spark Engine
+│
+├── User Memory (40% of Total Memory after reserving 300 MB)
+│   ├── User Defined Functions (UDFs)
+│   ├── Metadata
+│   └── User-created data structures
+│
+└── Spark Memory (60% of Total Memory after reserving 300 MB)
+    │
+    ├── Execution Memory (50%)
+    │   ├── Shuffle Operations
+    │   ├── Joins
+    │   ├── Sorts
+    │   └── Transformations
+    │
+    └── Storage Memory (50%)
+        ├── Cache
+        ├── Persisted Data
+        ├── Broadcast Variables
+        └── Long-Term Memory Storage
+```
+
+## Memory Breakdown
+
+### Reserved Memory
+- **300 MB**
+- Fixed memory reserved internally by the Spark Engine.
+
+### User Memory
+- **40% of (Total Memory - 300 MB)**
+- Used for:
+  - UDFs (User Defined Functions)
+  - Metadata
+  - User-created objects
+
+### Spark Memory
+- **60% of (Total Memory - 300 MB)**
+- Managed by Spark's **Unified Memory Manager**.
+
+#### Execution Memory
+- **50% of Spark Memory**
+- Used for short-term execution tasks such as:
+  - Transformations
+  - Shuffle operations
+  - Joins
+  - Sorting
+
+#### Storage Memory
+- **50% of Spark Memory**
+- Used for long-term storage such as:
+  - Caching
+  - Persisted DataFrames/RDDs
+  - Broadcast variables
 
 Executer memory can evict storage Memory  but storage memory does not evict executor memory
 
@@ -136,16 +185,6 @@ spark.memory.offHeap.size=8g
 
 
 
-### What's the difference between On-Heap and Off-Heap Memory?
-
-On-Heap               |       Off-Heap
------------------------------------
-Inside JVM            |    HeapOutside JVM Heap
-Managed by GC         | Not managed by GC
-Higher GC overhead    |   Lower GC overhead
-Default memory area   | Optional configuration
-Stores Java objects   |  Stores binary data
-
 ### Difference Between cache() and persist() from Memory Perspective?
 cache()  (Stores only in RAM.)
           MEMORY_ONLY
@@ -169,7 +208,7 @@ results
 ### Which Join Consumes Maximum Memory?
 Sort Merge Join
 
-==> Production Scenario: Executor OOM ?
+### Production Scenario: Executor OOM ?
 Job failing because of 
           ExecutorLostFailure
           OutOfMemoryError
@@ -223,15 +262,15 @@ Plain TextA → A_1, A_2, A_3, A_4Show more lines
 The most commonly used skew-handling technique.
 Salting is a skew mitigation technique where a highly skewed key is split into multiple keys using random suffixes. The dimension side is duplicated with matching suffixes. This distributes the workload across partitions and prevents a single executor from processing all records associated with a hot key.
 
-========================================Advanced Architect-Level Questions===========================================
+======================================== # Advanced Architect-Level Questions===========================================
 
-# Why does Storage Memory use LRU eviction?
+### Why does Storage Memory use LRU eviction?
 Answer: To remove least recently accessed blocks first, maximizing cache hit ratio while making room for new cached data.
 
-# Why can Execution borrow from Storage but not vice versa?
+### Why can Execution borrow from Storage but not vice versa?
 Answer: Active tasks cannot safely lose execution memory during computation. Cached data can be recomputed, so Spark allows storage eviction but protects execution memory.
 
-# What causes excessive spill despite sufficient executor memory?
+### What causes excessive spill despite sufficient executor memory?
 Answer:
       Data skew
       Large partitions
@@ -240,7 +279,7 @@ Answer:
       Sort Merge Joins
       Inefficient aggregations
 
-# How do you reduce GC pressure?
+### How do you reduce GC pressure?
 Answer:
       Kryo Serialization
       Broadcast joins
@@ -249,7 +288,32 @@ Answer:
       Enable Tungsten
       Use Off-Heap Memory
 
-# Explain a real production memory tuning exercise.
+### Explain a real production memory tuning exercise.
 We observed 35% execution time spent in GC and significant disk spill. Spark UI showed skewed partitions and sort-merge joins. 
 We enabled AQE, switched to Broadcast Join for dimension tables under 500MB, increased shuffle partitions from 200 to 1200, enabled Kryo serialization, and optimized caching strategy. 
 Runtime reduced from 3.5 hours to 48 minutes while GC dropped below 5%."
+
+
+### What's the difference between On-Heap and Off-Heap Memory?
+
+## On-Heap vs Off-Heap Memory
+
+| Feature | On-Heap Memory | Off-Heap Memory |
+|----------|----------|----------|
+| **Location** | Inside JVM Heap | Outside JVM Heap |
+| **Management** | Managed by Garbage Collector (GC) | Not Managed by GC |
+| **GC Overhead** | Higher GC Overhead | Lower GC Overhead |
+| **Default Usage** | Default Memory Area | Optional Configuration |
+| **Storage Type** | Stores Java Objects | Stores Binary Data |
+
+### On-Heap Memory
+
+- Located inside the JVM Heap.
+- Managed by Java Garbage Collection (GC).
+- Used by default in Spark and Java applications.
+- Stores objects in Java object format.
+- May experience higher GC pauses when memory usage is high.
+
+### Off-Heap Memory
+
+- Located outside the JVM Heap.
